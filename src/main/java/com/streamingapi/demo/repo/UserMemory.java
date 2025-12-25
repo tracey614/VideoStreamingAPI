@@ -1,30 +1,37 @@
 package com.streamingapi.demo.repo;
-import java.time.LocalDate;
+
+import com.streamingapi.demo.model.user;
+ import java.util.Collection;
+ import java.util.Map;
+ import java.util.concurrent.ConcurrentHashMap;
+ import java.util.stream.Collectors;
 
 public class UserMemory {
-    
-private final String username;
-private final String password;
-private final String email;
-private final LocalDate dateOfBirth;
-private final String creditCardNumber;
+    private final Map<String, user> usersByUsername = new ConcurrentHashMap<>();
 
-public User(String username, String password, String email, LocalDate dateOfBirth, String creditCardNumber) {
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.dateOfBirth = dateOfBirth;
-    this.creditCardNumber = creditCardNumber;
-}
-public String getUsername() 
-{ return username;}
-public String getPassword() 
-{ return password;} 
-public String getEmail() 
-{ return email;}
-public LocalDate getDateOfBirth() 
-{ return dateOfBirth;}
-public String getCreditCardNumber() 
-{ return creditCardNumber;}
+    public boolean existsByUsername(String username) {
+        return usersByUsername.containsKey(username);
+    }
+
+    public void save(user user) {
+        usersByUsername.put(user.getUsername(), user);
+    }
+
+    public Collection<user> findAll() {
+        return usersByUsername.values();
+    }
+
+    public Collection<user> findUsersWithCard(boolean hasCard) {
+        return usersByUsername.values().stream()
+                .filter(u -> (u.getCreditCardNumber() != null) == hasCard)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isCardRegistered(String cardNumber) {
+        return usersByUsername.values().stream()
+                .anyMatch(u -> cardNumber.equals(u.getCreditCardNumber()));
+    }
+
+
 
 }
