@@ -31,7 +31,7 @@ public class RegisterUserRQ {
     private LocalDate dateOfBirth;
 
     //optional credit card field
-    @Pattern(regexp = "^(\\d{16})?$", message = "Credit Card number must be 16 digits") 
+    @Pattern(regexp = "^(\\d{16})?$", message = "Credit Card number must be 16 digits") //allows null for optionality
     private String creditCardNumber;
 
     //Getters and Setters
